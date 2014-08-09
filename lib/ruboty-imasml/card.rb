@@ -32,7 +32,7 @@ module RubotyImasml
 
       page = Nokogiri::HTML(open(link, 'r', &:read))
 
-      image = page.at('.ie5 table img')
+      image = page.at('.ie5 table img[src^="http"]') # be careful on paraedit img
       return false unless image
       @image_url = image[:src]
 
