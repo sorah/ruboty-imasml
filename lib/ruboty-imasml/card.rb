@@ -36,6 +36,10 @@ module RubotyImasml
       return false unless image
       @image_url = image[:src]
 
+      if ENV['RUBOTY_IMASML_SITE']
+        @image_url.sub!(/^#{Regexp.escape(CardCollection::IMASML_DEFAULT_SITE)}/, ENV['RUBOTY_IMASML_SITE'])
+      end
+
       serif_tag = page.at('.ie5 table tr:last-child td')
       if serif_tag
         @serif = serif_tag.inner_text

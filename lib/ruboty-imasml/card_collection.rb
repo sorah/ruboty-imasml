@@ -4,7 +4,8 @@ require 'nokogiri'
 
 module RubotyImasml
   class CardCollection
-    LIST_PAGE = 'http://www.millionlive.com/index.php?cmd=list'
+    IMASML_DEFAULT_SITE = "http://millionlive.com"
+    LIST_PAGE = "#{ENV['RUBOTY_IMASML_SITE'] || IMASML_DEFAULT_SITE}/index.php?cmd=list"
 
     def initialize(list_page = LIST_PAGE)
       @cards = nil
