@@ -1,11 +1,11 @@
 require 'ruboty-imasml/card'
+require 'ruboty-imasml/site'
 require 'open-uri'
 require 'nokogiri'
 
 module RubotyImasml
   class CardCollection
-    IMASML_DEFAULT_SITE = "http://millionlive.com"
-    LIST_PAGE = "#{ENV['RUBOTY_IMASML_SITE'] || IMASML_DEFAULT_SITE}/index.php?cmd=list"
+    LIST_PAGE = "http://millionlive.com/index.php?cmd=list"
 
     def initialize(list_page = LIST_PAGE)
       @cards = nil
@@ -13,7 +13,7 @@ module RubotyImasml
 
     def cards
       @cards ||= begin
-        page = Nokogiri::HTML(open(LIST_PAGE, 'r', &:read))
+        page = Nokogiri::HTML(open(Site.ensure_site(LIST_PAGE), 'r', &:read))
 
         page.search("#contents_wrapper ul li ul li a").map do |link|
           Card.new(link.inner_text, link[:href])

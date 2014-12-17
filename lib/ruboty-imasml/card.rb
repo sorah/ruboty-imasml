@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
+require 'ruboty-imasml/site'
 
 module RubotyImasml
   class Card
@@ -30,14 +31,14 @@ module RubotyImasml
       return if @parsed
       @parsed = true
 
-      page = Nokogiri::HTML(open(link, 'r', &:read))
+      page = Nokogiri::HTML(open(Site.ensure_site(link), 'r', &:read))
 
       image = page.at('.ie5 table img[src^="http"]') # be careful on paraedit img
       return false unless image
-      @image_url = image[:src]
+      @image_url = Site.ensure_site(image[:src])
 
       if ENV['RUBOTY_IMASML_SITE']
-        @image_url.sub!(/^#{Regexp.escape(CardCollection::IMASML_DEFAULT_SITE)}/, ENV['RUBOTY_IMASML_SITE'])
+        @image_url
       end
 
       serif_tag = page.at('.ie5 table tr:last-child td')
